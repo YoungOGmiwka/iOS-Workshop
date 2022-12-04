@@ -16,37 +16,44 @@ protocol Configurable {
     func configure(_ model: Model)
 }
 
+private extension CGFloat {
+    static let usernameFontSize: CGFloat = 32
+    static let defaultFontSize: CGFloat = 16
+    static let inset: CGFloat = 10
+    static let spacing: CGFloat = 5
+}
+
 class UserCell: UITableViewCell, Configurable {
     
     typealias Model = User
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 32)
+        label.font = .boldSystemFont(ofSize: .usernameFontSize)
         return label
     }()
     
     private lazy var usernameLabel: UILabel = {
         let label = UILabel()
-        label.font = .italicSystemFont(ofSize: 16)
+        label.font = .italicSystemFont(ofSize: .defaultFontSize)
         return label
     }()
     
     private lazy var emailLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16)
+        label.font = .systemFont(ofSize: .defaultFontSize)
         return label
     }()
     
     private lazy var phoneLabel: UILabel = {
         let label = UILabel()
-        label.font = .italicSystemFont(ofSize: 16)
+        label.font = .italicSystemFont(ofSize: .defaultFontSize)
         return label
     }()
     
     private lazy var websiteLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16)
+        label.font = .systemFont(ofSize: .defaultFontSize)
         label.textColor = .link
         return label
     }()
@@ -62,7 +69,7 @@ class UserCell: UITableViewCell, Configurable {
             ]
         )
         containerView.axis = .vertical
-        containerView.spacing = 5
+        containerView.spacing = .spacing
         containerView.distribution = .equalCentering
         return containerView
     }()
@@ -72,7 +79,7 @@ class UserCell: UITableViewCell, Configurable {
         
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalToSuperview().inset(CGFloat.inset)
         }
     }
     

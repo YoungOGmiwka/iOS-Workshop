@@ -14,12 +14,14 @@ private extension String {
 protocol IUsersPresenter: AnyObject {
     func viewDidLoad()
     func getItem(for index: Int) -> User
+    func didSelectUser(at index: Int)
     var numberOfRows: Int { get }
 }
 
 class UsersPresenter {
     private let service: IWorkshopService
     private let dataSource: IUserViewDataSource
+    private let router: IRouter?
     weak var view: IUsersView?
     
     var numberOfRows: Int {
@@ -28,10 +30,12 @@ class UsersPresenter {
     
     init(
         service: IWorkshopService,
-        dataSource: IUserViewDataSource
+        dataSource: IUserViewDataSource,
+        router: IRouter?
     ) {
         self.service = service
         self.dataSource = dataSource
+        self.router = router
     }
 }
 
@@ -43,7 +47,7 @@ extension UsersPresenter: IUsersPresenter {
         service.loadUsers { [weak self] result in
             switch result {
             case let .success(users):
-                self?.dataSource.save(users)
+                self?.dataSource.saveUsers(users)
             case let .failure(error):
                 if let serviceError = error as? WorkshopServiceError {
                     DispatchQueue.main.async {
@@ -63,5 +67,9 @@ extension UsersPresenter: IUsersPresenter {
     
     func getItem(for index: Int) -> User {
         dataSource.getUser(at: index)
+    }
+    
+    func didSelectUser(at index: Int) {
+        router?.showProfile(userId: index)
     }
 }

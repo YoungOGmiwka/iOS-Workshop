@@ -110,6 +110,12 @@ extension UsersViewController: IUsersView {
 // MARK: - UITableViewDelegate
 
 extension UsersViewController: UITableViewDelegate {
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        output?.didSelectUser(at: indexPath.row + 1)
+    }
 }
 
 // MARK: - UITableViewDelegate

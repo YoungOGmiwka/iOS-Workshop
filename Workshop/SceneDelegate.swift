@@ -9,24 +9,22 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
+    
+    private let rootNavigationController = UINavigationController()
+    
+    private var usersAssembly: IUsersAssembly { UsersAssembly() }
+    
+    private lazy var router: IRouter = {
+        Router(transitionHandler: rootNavigationController, usersAssembly: usersAssembly)
+    }()
 
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-
         let window = UIWindow(windowScene: windowScene)
-        let alertFactory = UsersAlertViewFactory()
-        let service = WorkshopService()
-        let dataSource = UsersViewDataSource()
-        let presenter = UsersPresenter(
-            service: service,
-            dataSource: dataSource
-        )
-        let usersViewController = UsersViewController(alertFactory: alertFactory, output: presenter)
-        presenter.view = usersViewController
-        let rootNavigationController = UINavigationController(rootViewController: usersViewController)
         window.rootViewController = rootNavigationController
+        router.showUsersScreen()
         self.window = window
         window.makeKeyAndVisible()
     }
